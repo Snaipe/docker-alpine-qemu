@@ -16,6 +16,7 @@ mkdir /src/build && cd /src/build
     --disable-tools \
     --enable-linux-user \
     --enable-bsd-user \
+    --target-list="aarch64-linux-user arm-linux-user i386-linux-user ppc64le-linux-user riscv64-linux-user s390x-linux-user x86_64-linux-user" \
     --prefix=/usr \
     --interp-prefix=/
 
