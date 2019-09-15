@@ -1,7 +1,7 @@
+FROM scratch
+
 ARG ARCH
 ARG QEMU_ARCH
-
-FROM scratch
 
 ADD alpine-minirootfs-${ARCH}.tar.gz /
 
