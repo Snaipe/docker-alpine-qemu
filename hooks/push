@@ -5,5 +5,5 @@ ARCHES=(x86 x86_64 armhf aarch64 ppc64le s390x)
 VERSION=$DOCKER_TAG
 
 for arch in ${ARCHES[@]}; do
-	docker push $IMAGE_NAME:$arch-$VERSION
+	docker push $DOCKER_REPO:$arch-$VERSION
 done

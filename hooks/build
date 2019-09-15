@@ -27,9 +27,9 @@ docker run --rm -v $(pwd)/ld-qemu:/output -it ld-qemu-build
 
 for arch in ${ARCHES[@]}; do
 	download_rootfs $arch
-	docker build -t $IMAGE_NAME:$arch-$VERSION .
+	docker build -t $DOCKER_REPO:$arch-$VERSION .
 done
 
 # Special-casing x86_64 because it would be ridiculous to run with qemu.
 docker pull alpine:$VERSION
-docker tag alpine:$VERSION $IMAGE_NAME:x86_64-$VERSION
+docker tag alpine:$VERSION $DOCKER_REPO:x86_64-$VERSION
