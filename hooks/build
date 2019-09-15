@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 CDN=http://dl-cdn.alpinelinux.org/alpine
 ARCHES=(x86 armhf aarch64 ppc64le s390x)
@@ -13,21 +14,32 @@ download_rootfs() {
 		| grep -Po '\d.\d.\d')
 	local filename="alpine-minirootfs-$fullver-$arch.tar.gz"
 	local url="$CDN/v$VERSION/releases/$arch/$filename"
+	local local_filename="alpine-minirootfs-$arch.tar.gz"
 
 	echo "Downloading $url"
-	curl --progress -LO "$url"
+	curl --progress -Lo "$local_filename" "$url"
 	echo "Verifying archive integrity..."
-	curl -Ss -L "$url.sha256" | sha256sum -c
+	curl -Ss -L "$url.sha256" \
+		| sed -Ee "s:$filename:$local_filename:" \
+		| sha256sum -c
 }
 
 docker build -t ld-qemu-build qemu-static
 mkdir -p ld-qemu
 chmod g+s ld-qemu
-docker run --rm -v $(pwd)/ld-qemu:/output -it ld-qemu-build
+docker run --rm -v $(pwd)/ld-qemu:/output ld-qemu-build
 
 for arch in ${ARCHES[@]}; do
+	qemu_arch=$arch
+	case $arch in
+		armhf) qemu_arch=arm;;
+		x86) qemu_arch=i386;;
+	esac
 	download_rootfs $arch
-	docker build -t $DOCKER_REPO:$arch-$VERSION .
+	docker build \
+		--build-arg ARCH=$arch \
+		--build-arg QEMU_ARCH=$qemu_arch \
+		-t $DOCKER_REPO:$arch-$VERSION .
 done
 
 # Special-casing x86_64 because it would be ridiculous to run with qemu.

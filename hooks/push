@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ARCHES=(x86 x86_64 armhf aarch64 ppc64le s390x)
 
