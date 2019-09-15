@@ -3,8 +3,7 @@
 ARCHES=(x86 x86_64 armhf aarch64 ppc64le s390x)
 
 VERSION=$DOCKER_TAG
-SHORTVER=${VERSION%.*}
 
 for arch in ${ARCHES[@]}; do
-	docker push $IMAGE_NAME:$arch-$SHORTVER
+	docker push $IMAGE_NAME:$arch-$VERSION
 done

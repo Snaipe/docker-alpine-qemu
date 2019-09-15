@@ -4,13 +4,15 @@ CDN=http://dl-cdn.alpinelinux.org/alpine
 ARCHES=(x86 armhf aarch64 ppc64le s390x)
 
 VERSION=$DOCKER_TAG
-SHORTVER=${VERSION%.*}
 
 download_rootfs() {
 	local arch=$1; shift
 
-	local filename="alpine-minirootfs-$VERSION-$arch.tar.gz"
-	local url="$CDN/v$SHORTVER/releases/$arch/$filename"
+	local fullver=$(curl -L $CDN/v$VERSION/releases/$arch/latest-releases.yaml \
+		| grep version: | head -n1 \
+		| grep -Po '\d.\d.\d')
+	local filename="alpine-minirootfs-$fullver-$arch.tar.gz"
+	local url="$CDN/v$VERSION/releases/$arch/$filename"
 
 	echo "Downloading $url"
 	curl --progress -LO "$url"
@@ -25,9 +27,9 @@ docker run --rm -v $(pwd)/ld-qemu:/output -it ld-qemu-build
 
 for arch in ${ARCHES[@]}; do
 	download_rootfs $arch
-	docker build -t $IMAGE_NAME:$arch-$SHORTVER .
+	docker build -t $IMAGE_NAME:$arch-$VERSION .
 done
 
 # Special-casing x86_64 because it would be ridiculous to run with qemu.
-docker pull alpine:$SHORTVER
-docker tag alpine:$SHORTVER $IMAGE_NAME:x86_64-$SHORTVER
+docker pull alpine:$VERSION
+docker tag alpine:$VERSION $IMAGE_NAME:x86_64-$VERSION
