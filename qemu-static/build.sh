@@ -4,7 +4,7 @@ gcc -static -o /tmp/qemu-enter -Wall -Wextra -Wno-unused-parameter /qemu-enter.c
 
 git clone --depth=1 \
 	--single-branch \
-	--branch=alpine-3.8 \
+	--branch=alpine-3.10 \
 	https://github.com/Snaipe/alpine-qemu-execve /src
 
 mkdir /src/build && cd /src/build
