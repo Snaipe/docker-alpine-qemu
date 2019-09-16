@@ -11,10 +11,15 @@ int main(int argc, char **argv)
 	char *args[arg_max];
 	size_t i = 0, j = 1;
 
-	args[i++] = argv[1];
+	args[i++] = "/bin/sh";
 	args[i++] = "-0";
-	args[i++] = argv[1];
+	args[i++] = "/bin/sh";
 	args[i++] = "-execve";
+	args[i++] = "--";
+	args[i++] = "/bin/sh";
+	args[i++] = "-lc";
+	args[i++] = "exec -- \"$@\"";
+	args[i++] = "-";
 
 	for (; argv[j] && i < sizeof (args) / sizeof (void *); ++i, ++j) {
 		args[i] = argv[j];
