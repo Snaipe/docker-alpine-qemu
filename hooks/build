@@ -11,7 +11,7 @@ download_rootfs() {
 
 	local fullver=$(curl -L $CDN/v$VERSION/releases/$arch/latest-releases.yaml \
 		| grep version: | head -n1 \
-		| grep -Po '\d.\d.\d')
+		| grep -Po '\d+.\d+.\d+')
 	local filename="alpine-minirootfs-$fullver-$arch.tar.gz"
 	local url="$CDN/v$VERSION/releases/$arch/$filename"
 	local local_filename="alpine-minirootfs-$arch.tar.gz"
