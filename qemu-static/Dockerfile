@@ -17,6 +17,7 @@ RUN apk add --no-cache \
 VOLUME /output
 
 COPY qemu-enter.c /qemu-enter.c
+COPY qemu-sh.c /qemu-sh.c
 COPY build.sh /usr/bin/build
 
 CMD ["/usr/bin/build"]

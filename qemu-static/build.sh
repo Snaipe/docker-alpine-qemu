@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 gcc -static -o /tmp/qemu-enter -Wall -Wextra -Wno-unused-parameter /qemu-enter.c
+gcc -static -o /tmp/qemu-sh -Wall -Wextra -Wno-unused-parameter /qemu-sh.c
 
 git clone --depth=1 \
 	--single-branch \
@@ -32,5 +33,6 @@ for interp in /tmp/qemu/usr/bin/qemu-*; do
     destdir=/tmp/"$arch"
     install -D "$interp" "$destdir"/lib/ld-qemu.so
     install -D /tmp/qemu-enter "$destdir"/sbin/qemu-enter
+    install -D /tmp/qemu-sh "$destdir"/sbin/qemu-sh
     tar czf /output/ld-"$arch".tar.gz -C "$destdir" .
 done
